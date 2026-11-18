@@ -1,0 +1,6 @@
+{
+  "name": "Mi Presupuesto Mensual",
+  "description": "Dashboard de control de gastos personales con visualización de saldo y movimientos recientes.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

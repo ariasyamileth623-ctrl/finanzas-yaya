@@ -1,0 +1,144 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Private user account profile and monthly budget configuration.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the account owner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Account email address.",
+          "maxLength": 320
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name shown in the dashboard and assistant.",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "monthlyBudget": {
+          "type": "number",
+          "description": "Base monthly budget amount in COP."
+        },
+        "hasSetInitialBudget": {
+          "type": "boolean",
+          "description": "Whether the user has completed the initial monthly budget prompt."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was last updated."
+        }
+      },
+      "required": [
+        "uid",
+        "email",
+        "displayName",
+        "monthlyBudget",
+        "hasSetInitialBudget",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "An individual expense or income transaction belonging to a user.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the transaction owner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "amount": {
+          "type": "number",
+          "description": "Positive transaction amount in COP."
+        },
+        "category": {
+          "type": "string",
+          "description": "Category name for the expense or income.",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "date": {
+          "type": "string",
+          "description": "ISO calendar date YYYY-MM-DD.",
+          "minLength": 10,
+          "maxLength": 10,
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "icon": {
+          "type": "string",
+          "description": "Icon identifier for display.",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "type": {
+          "type": "string",
+          "enum": ["expense", "income"],
+          "description": "Transaction direction: expense or income."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional short description.",
+          "maxLength": 200
+        },
+        "paymentMethod": {
+          "type": "string",
+          "description": "Optional payment method.",
+          "maxLength": 60
+        },
+        "observations": {
+          "type": "string",
+          "description": "Optional additional notes.",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the transaction was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the transaction was last updated."
+        }
+      },
+      "required": [
+        "userId",
+        "amount",
+        "category",
+        "date",
+        "icon",
+        "type",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private profile and monthly budget configuration for a single authenticated user."
+    },
+    "/users/{userId}/transactions/{transactionId}": {
+      "schema": { "$ref": "#/entities/Transaction" },
+      "description": "Private financial movements (expenses and incomes) scoped to a single user."
+    }
+  }
+}
